@@ -30,4 +30,11 @@ public class Dictionary<TKey, TValue>
 		_hashMap.put(key, value);
 		return new KeyValuePair<TKey, TValue>(key, value);
 	}
+	
+	public KeyValuePair<TKey, TValue> update(TKey key, TValue value)
+	{
+		if (_hashMap.containsKey(key)) _hashMap.remove(key);
+		_hashMap.put(key, value);
+		return new KeyValuePair<TKey, TValue>(key, value);
+	}
 }

@@ -3,19 +3,31 @@ package net.alcetech.Core.Collections.ObjectModel;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
-public class Collection<T>
+public class Collection<T> implements Iterable<T>
 {
 	private ArrayList<T> _list = new ArrayList<>();
 	
-	public void add(T item)
+	public boolean add(T item)
 	{
+		ItemCancelEventArgs<T> e = new ItemCancelEventArgs<T>(item, indexOf(item));
+		onItemAdding(e);
+		if (e.isCanceled()) return false;
+		
 		_list.add(item);
+		onItemAdded(new ItemEventArgs<T>(item, indexOf(item)));
+		return true;
 	}
 	
 	public boolean contains(T item)
 	{
 		return _list.contains(item);
+	}
+	
+	public int indexOf(T item)
+	{
+		return _list.indexOf(item);
 	}
 	
 	public int count()
@@ -29,17 +41,45 @@ public class Collection<T>
 		return _list.get(index);
 	}
 	
-	public void remove(T item)
+	public boolean remove(T item)
 	{
+		ItemCancelEventArgs<T> e = new ItemCancelEventArgs<T>(item, indexOf(item));
+		onItemRemoving(e);
+		if (e.isCanceled()) return false;
+		
 		_list.remove(item);
+		onItemRemoved(new ItemEventArgs<T>(item, indexOf(item)));
+		return true;
 	}
-	public void removeAt(int index)
+	public boolean removeAt(int index)
 	{
-		_list.remove(index);
+		T item = getByIndex(index);
+		return remove(item);
+	}
+	
+	protected void onItemAdding(ItemCancelEventArgs<T> e)
+	{
+	}
+	protected void onItemAdded(ItemEventArgs<T> e)
+	{
+	}
+	
+	protected void onItemRemoving(ItemCancelEventArgs<T> e)
+	{
+	}
+	protected void onItemRemoved(ItemEventArgs<T> e)
+	{
 	}
 
 	public ReadOnlyCollection<T> toReadOnlyCollection()
 	{
 		return new ReadOnlyCollection<T>(this);
+	}
+
+	@Override
+	public Iterator<T> iterator()
+	{
+		// TODO Auto-generated method stub
+		return _list.iterator();
 	}
 }
