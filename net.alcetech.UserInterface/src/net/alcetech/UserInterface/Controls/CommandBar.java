@@ -154,7 +154,20 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 		CommandItem item = hitTest(e.getPoint());
 		if (item != null)
 		{
-			System.out.println("hit test '" + Application.getCommandCollection().getByName(((CommandReferenceCommandItem)item).getCommandName()).getName() + "'");
+			CommandReferenceCommandItem crci = (CommandReferenceCommandItem)item;
+			Command cmd = Application.getCommandCollection().getByName(crci.getCommandName());
+			if (cmd.getCommandCollection().count() > 0)
+			{
+				// we have child commands, so popup a menu
+				System.out.println("has children '" + cmd.getName() + "'");
+				
+				CommandBarPopup popup = new CommandBarPopup(cmd);
+				popup.setVisible(true);
+			}
+			else
+			{
+				System.out.println("no children '" + cmd.getName() + "'");
+			}
 		}
 		else
 		{

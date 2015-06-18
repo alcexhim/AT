@@ -22,6 +22,7 @@ public class VisualStudio2012Theme extends Theme
 
 	private static void initializeLightColorScheme()
 	{
+		mvarLightColorScheme.setColor("MenuBackground", Color.fromHexadecimal("#F6F6F6"));
 		mvarLightColorScheme.setColor("MenuBarBackground", Color.fromHexadecimal("#EEEEF2"));
 		mvarLightColorScheme.setColor("MenuBarForeground", Color.fromHexadecimal("#525252"));
 		
