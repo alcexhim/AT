@@ -16,6 +16,7 @@ public class VisualStudio2012Theme extends Theme
 	
 	public VisualStudio2012Theme()
 	{
+		this.setName("VisualStudio2012");
 		this.setColorScheme(VisualStudio2012Theme.getLightColorScheme());
 	}
 

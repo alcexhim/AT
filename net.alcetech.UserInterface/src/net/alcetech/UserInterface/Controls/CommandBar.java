@@ -32,19 +32,36 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 		this.addMouseWheelListener(this);
 	}
 	
+	private CommandDisplayStyle mvarDefaultCommandDisplayStyle = CommandDisplayStyle.ImageOnly;
+	public CommandDisplayStyle getDefaultCommandDisplayStyle() { return mvarDefaultCommandDisplayStyle; }
+	public void setDefaultCommandDisplayStyle(CommandDisplayStyle value) { mvarDefaultCommandDisplayStyle = value; }
+	
 	private CommandItem.CommandItemCollection mvarCommandCollection = new CommandItem.CommandItemCollection();
 	public CommandItem.CommandItemCollection getCommandCollection() { return mvarCommandCollection; }
 	
-	private int getCommandWidth(Command cmd)
+	private int getCommandWidth(CommandReferenceCommandItem crci)
 	{
-		String title = cmd.getTitle();
-		if (title.indexOf('_') > -1)
-		{
-			title = title.substring(0, title.indexOf('_')) + title.substring(title.indexOf('_') + 1);
-		}
+		CommandDisplayStyle displayStyle = getDefaultCommandDisplayStyle();
+		if (crci.getDisplayStyle() != CommandDisplayStyle.Default) displayStyle = crci.getDisplayStyle();
 		
-		FontMetrics metrics = this.getGraphics().getFontMetrics();
-		return metrics.stringWidth(title);
+		int w = 0;
+		switch (displayStyle)
+		{
+			case ImageAndText:
+			case TextOnly:
+			{
+				Command cmd = Application.getCommandCollection().getByName(crci.getCommandName());
+				String title = cmd.getTitle();
+				if (title.indexOf('_') > -1)
+				{
+					title = title.substring(0, title.indexOf('_')) + title.substring(title.indexOf('_') + 1);
+				}
+				FontMetrics metrics = this.getGraphics().getFontMetrics();
+				w += metrics.stringWidth(title);
+				break;
+			}
+		}
+		return w;
 	}
 	
 	private int menuItemMarginTop = 4;
@@ -68,24 +85,36 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 			if (CommandReferenceCommandItem.class.isInstance(item))
 			{
 				CommandReferenceCommandItem crci = (CommandReferenceCommandItem)item;
+				
+				CommandDisplayStyle displayStyle = getDefaultCommandDisplayStyle();
+				if (crci.getDisplayStyle() != CommandDisplayStyle.Default) displayStyle = crci.getDisplayStyle();
+				
 				Command cmd = Application.getCommandCollection().getByName(crci.getCommandName());
-				
-				String title = cmd.getTitle();
-				if (title.indexOf('_') > -1)
-				{
-					title = title.substring(0, title.indexOf('_')) + title.substring(title.indexOf('_') + 1);
-				}
-				
+
 				if (crci == _hoverItem)
 				{
 					g.setColor(Theme.getDefaultTheme().getColorScheme().getColor("MenuItemHoverBackground").toAwtColor());
-					g.fillRect(x, y + menuItemMarginTop, getCommandWidth(cmd) + menuItemPaddingLeft + menuItemPaddingRight, getHeight() - menuItemMarginTop - menuItemMarginBottom);
+					g.fillRect(x, y + menuItemMarginTop, getCommandWidth(crci) + menuItemPaddingLeft + menuItemPaddingRight, getHeight() - menuItemMarginTop - menuItemMarginBottom);
 				}
 				
-				g.setColor(Theme.getDefaultTheme().getColorScheme().getColor("MenuBarForeground").toAwtColor());
-				g.drawString(title, x + menuItemPaddingLeft, y + menuItemPaddingTop + 15);
+				switch (displayStyle)
+				{
+					case ImageAndText:
+					case TextOnly:
+					{
+						String title = cmd.getTitle();
+						if (title.indexOf('_') > -1)
+						{
+							title = title.substring(0, title.indexOf('_')) + title.substring(title.indexOf('_') + 1);
+						}
+						
+						g.setColor(Theme.getDefaultTheme().getColorScheme().getColor("MenuBarForeground").toAwtColor());
+						g.drawString(title, x + menuItemPaddingLeft, y + menuItemPaddingTop + 15);
+						break;
+					}
+				}
 				
-				w = getCommandWidth(cmd);
+				w = getCommandWidth(crci);
 				x += w + menuItemPaddingLeft + menuItemPaddingRight;
 			}
 		}
@@ -159,7 +188,7 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 			if (CommandReferenceCommandItem.class.isInstance(item))
 			{
 				CommandReferenceCommandItem crci = (CommandReferenceCommandItem)item;
-				cw = getCommandWidth(Application.getCommandCollection().getByName(crci.getCommandName())) + menuItemPaddingLeft + menuItemPaddingRight;
+				cw = getCommandWidth(crci) + menuItemPaddingLeft + menuItemPaddingRight;
 			}
 			if (x >= cx && x <= (cx + cw))
 			{
