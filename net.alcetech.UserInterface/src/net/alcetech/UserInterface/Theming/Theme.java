@@ -23,6 +23,9 @@ public abstract class Theme
 	private String mvarLookAndFeelClassName = UIManager.getSystemLookAndFeelClassName();
 	public String getLookAndFeelClassName() { return mvarLookAndFeelClassName; }
 	
+	private Metrics mvarMetrics = new Metrics();
+	public Metrics getMetrics() { return mvarMetrics; }
+	
 	public void drawMenuBarBackground(Graphics g, Rectangle rectangle)
 	{
 		g.setColor(mvarColorScheme.getColor("MenuBarBackground").toAwtColor());

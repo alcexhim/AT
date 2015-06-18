@@ -41,6 +41,6 @@ public class Command
 		}
 	}
 	
-	private Command.CommandCollection mvarCommandCollection = new Command.CommandCollection();
-	public Command.CommandCollection getCommandCollection() { return mvarCommandCollection; }
+	private CommandItem.CommandItemCollection mvarCommandCollection = new CommandItem.CommandItemCollection();
+	public CommandItem.CommandItemCollection getCommandCollection() { return mvarCommandCollection; }
 }
