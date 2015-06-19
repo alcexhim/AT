@@ -26,7 +26,7 @@ public abstract class Theme
 	private Metrics mvarMetrics = new Metrics();
 	public Metrics getMetrics() { return mvarMetrics; }
 	
-	public void drawMenuBarBackground(Graphics g, Rectangle rectangle)
+	public void drawCommandBarBackground(Graphics g, Rectangle rectangle)
 	{
 		g.setColor(mvarColorScheme.getColor("MenuBarBackground").toAwtColor());
 		g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);

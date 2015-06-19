@@ -73,7 +73,7 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 
 	public void paintComponent(Graphics g)
 	{
-		Theme.getDefaultTheme().drawMenuBarBackground(g, new Rectangle(0, 0, getWidth(), getHeight()));
+		Theme.getDefaultTheme().drawCommandBarBackground(g, new Rectangle(0, 0, getWidth(), getHeight()));
 		
 		int x = 0;
 		int y = 0; // who knows
@@ -90,7 +90,7 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 				if (crci.getDisplayStyle() != CommandDisplayStyle.Default) displayStyle = crci.getDisplayStyle();
 				
 				Command cmd = Application.getCommandCollection().getByName(crci.getCommandName());
-
+				
 				if (crci == _hoverItem)
 				{
 					g.setColor(Theme.getDefaultTheme().getColorScheme().getColor("MenuItemHoverBackground").toAwtColor());
