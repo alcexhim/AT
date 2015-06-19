@@ -2,6 +2,11 @@ package net.alcetech.UserInterface.Controls;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
 
 import javax.swing.*;
 
@@ -9,12 +14,13 @@ import net.alcetech.Core.*;
 import net.alcetech.UserInterface.Borders.ShadowPopupBorder;
 import net.alcetech.UserInterface.Theming.Theme;
 
-public class CommandBarPopup extends JWindow
+public class CommandBarPopup extends JWindow implements WindowListener, WindowFocusListener, FocusListener
 {
 	private Command _cmd = null;
-	public CommandBarPopup(Command cmd)
+	public CommandBarPopup(CommandBar parent, Command cmd)
 	{
 		_cmd = cmd;
+		
 		this.setBackground(new java.awt.Color(0, 0, 0, 0));
 		
 		int height = 0;
@@ -29,6 +35,10 @@ public class CommandBarPopup extends JWindow
 		height += Theme.getDefaultTheme().getMetrics().getMenuPadding().getBottom();
 		
 		this.setMinimumSize(new Dimension(240, height));
+		
+		this.addWindowListener(this);
+		this.addWindowFocusListener(this);
+		this.getContentPane().addFocusListener(this);
 		
 		JPanel panel = ((JPanel)this.getContentPane());
 		panel.setBorder(new ShadowPopupBorder());
@@ -59,5 +69,79 @@ public class CommandBarPopup extends JWindow
 			}
 			y += Theme.getDefaultTheme().getMetrics().getCommandItemHeight();
 		}
+	}
+
+	@Override
+	public void windowGainedFocus(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowLostFocus(WindowEvent e) {
+		// TODO Auto-generated method stub
+		this.setVisible(false);
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		this.setVisible(false);
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public boolean isFocusable()
+	{
+		return true;
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		this.toFront();
+		this.requestFocus();
+	}
+
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		this.setVisible(false);
 	}
 }

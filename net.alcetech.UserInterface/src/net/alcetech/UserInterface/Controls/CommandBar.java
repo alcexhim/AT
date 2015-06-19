@@ -16,7 +16,7 @@ import javax.swing.event.MouseInputListener;
 
 import net.alcetech.Core.*;
 import net.alcetech.UserInterface.*;
-import net.alcetech.UserInterface.Theming.Theme;
+import net.alcetech.UserInterface.Theming.*;
 
 public class CommandBar extends JComponent implements MouseInputListener, MouseWheelListener
 {
@@ -73,12 +73,30 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 
 	public void paintComponent(Graphics g)
 	{
-		Theme.getDefaultTheme().drawCommandBarBackground(g, new Rectangle(0, 0, getWidth(), getHeight()));
+		Theme theme = Theme.getDefaultTheme();
+		Metrics metrics = theme.getMetrics();
+		
+		theme.drawCommandBarBackground(g, new Rectangle(0, 0, getWidth(), getHeight()));
 		
 		int x = 0;
 		int y = 0; // who knows
 		int w = 0;
 		int h = getHeight();
+		
+		if (mvarFloatable)
+		{
+			Padding padding = metrics.getCommandBarGripPadding();
+			x += padding.getLeft();
+			y += padding.getTop();
+			
+			Rectangle rect = new Rectangle(x, y, metrics.getCommandBarGripSize(), h);
+			rect.x += x;
+			
+			theme.drawGrip(g, rect);
+			
+			x += padding.getRight();
+			y -= padding.getTop();
+		}
 		
 		for (CommandItem item : mvarCommandCollection)
 		{
@@ -119,6 +137,14 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 			}
 		}
 	}
+	
+	private boolean mvarFloatable = true;
+	/**
+	 * Determines whether this CommandBar is floatable.
+	 * @return boolean True if this ComamndBar can be detached from the rafting container, false otherwise.
+	 */
+	public boolean isFloatable() { return mvarFloatable; }
+	public void setFloatable(boolean value) { mvarFloatable = value; }
 	
 	public Dimension getPreferredSize()
 	{
@@ -161,8 +187,14 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 				// we have child commands, so popup a menu
 				System.out.println("has children '" + cmd.getName() + "'");
 				
-				CommandBarPopup popup = new CommandBarPopup(cmd);
+				CommandBarPopup popup = new CommandBarPopup(this, cmd);
+				
+				int x = this.getLocationOnScreen().x;
+				int y = this.getLocationOnScreen().y + this.getHeight();
+				
+				popup.setLocation(new Point(x, y));
 				popup.setVisible(true);
+				popup.requestFocus();
 			}
 			else
 			{

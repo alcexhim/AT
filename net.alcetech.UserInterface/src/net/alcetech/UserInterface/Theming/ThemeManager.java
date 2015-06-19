@@ -24,8 +24,8 @@ public class ThemeManager
 	{
 		return new String[]
 		{
-			Application.getBasePath() + "/Themes/" + mvarCurrentTheme.getName() + "/Icons/32x32/" + iconName + ".png",
-			Application.getBasePath() + "/Themes/" + mvarCurrentTheme.getName() + "/Icons/16x16/" + iconName + ".png"
+			mvarCurrentTheme.getBasePath() + "/Icons/32x32/" + iconName + ".png",
+			mvarCurrentTheme.getBasePath() + "/Icons/16x16/" + iconName + ".png"
 		};
 	}
 	public static ImageIcon GetThemedIcon(String iconName, String size)
