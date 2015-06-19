@@ -88,12 +88,14 @@ public class CommandBar extends JComponent implements MouseInputListener, MouseW
 			Padding padding = metrics.getCommandBarGripPadding();
 			x += padding.getLeft();
 			y += padding.getTop();
+			h -= padding.getTop() - padding.getBottom();
 			
 			Rectangle rect = new Rectangle(x, y, metrics.getCommandBarGripSize(), h);
 			rect.x += x;
 			
 			theme.drawGrip(g, rect);
 			
+			h += padding.getTop() - padding.getBottom();
 			x += padding.getRight();
 			y -= padding.getTop();
 		}

@@ -1,11 +1,21 @@
 package net.alcetech.UserInterface.Theming;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.PaintContext;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
 
+import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 
 import net.alcetech.Core.Application;
+import net.alcetech.UserInterface.*;
 import net.alcetech.UserInterface.Theming.BuiltinThemes.*;
 
 public abstract class Theme
@@ -37,7 +47,22 @@ public abstract class Theme
 	}
 	public void drawGrip(Graphics g, Rectangle rect)
 	{
+		BufferedImage image = new BufferedImage(4, 4, BufferedImage.TYPE_INT_BGR);
+		Graphics2D g2d = image.createGraphics();
 		
+		g2d.setColor(getColorScheme().getColor("Grip.Background").toAwtColor());
+		g2d.fillRect(0, 0, 4, 4);
+		
+		g2d.setColor(getColorScheme().getColor("Grip.Foreground").toAwtColor());
+		g2d.drawLine(0, 0, 3, 3);
+
+		g2d.setColor(getColorScheme().getColor("Grip.Background").toAwtColor());
+		for (int i = 1; i < 4; i += 2)
+		{
+			g2d.drawLine(i, 0, i, 3);
+		}
+		net.alcetech.UserInterface.Graphics gg = new net.alcetech.UserInterface.Graphics(g);
+		gg.fillRectangle(new TextureBrush(image), rect);
 	}
 
 }
